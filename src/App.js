@@ -1,25 +1,61 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'; 
+import AddTodo from './AddTodo';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.Component{
+  constructor(props){
+    super(props)
+    this.state = {
+      todos:[],
+      input:'',
+      editIndex: null
+      };
+  };
 }
+addTodo = () =>{
+  event.preventDefault();
+  const { input, todos, editIndex } = this.state;
 
-export default App;
+  
+  if (input.trim() === '') {
+    alert('Please enter a todo item!'); 
+    return; 
+
+}
+if (editIndex !== null) {
+  const updatedTodos = todos.map((todo, index) =>
+    index === editIndex ? { ...todo, text: input } : todo
+  );
+  this.setState({
+    todos: updatedTodos, 
+    input: '', 
+    editIndex: null, 
+  });
+} else {
+  
+  const newTodo = { text: input, completed: false }; 
+  this.setState({
+    todos: [...todos, newTodo], 
+    input: '', 
+  });
+};
+};
+render(){
+
+
+  return ( <div>
+      <h1>Todo List</h1> // Main heading for the todo list
+      <AddTodo
+        input={this.state.input} 
+        addTodo={this.addTodo} 
+        handleInputChange={this.handleInputChange} 
+      />
+      
+           </div>
+    );
+  }
+}
+  
+
+
+export default App; 
