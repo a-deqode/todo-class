@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AddTodo from './AddTodo';
+import TodoList from './TodoList';
 
 
 class App extends React.Component {
@@ -12,7 +13,7 @@ class App extends React.Component {
     };
   };
 
-addTodo = () => {
+addTodo = (event) => {
   event.preventDefault();
   const { input, todos, editIndex } = this.state;
 
@@ -41,14 +42,45 @@ addTodo = () => {
   };
 };
 
+toggleTodo = (index) => {
+  this.setState((prevState) => { 
+    const todos = [...prevState.todos]; 
+    todos[index].completed = !todos[index].completed; 
+    return { todos }; 
+  });
+};
+
+deleteTodo = (index) => {
+  this.setState((prevState) => { 
+    const todos = [...prevState.todos]; 
+    todos.splice(index, 1);
+    return { todos }; 
+  });
+};
+
+handleInputChange = (event) => { 
+  this.setState({ input: event.target.value }); 
+};
+
+startEdit = (index) => { 
+
+  this.setState({ input: this.state.todos[index].text, editIndex: index });
+};
+
 render(){
   return (<div>
-    <h1>Todo List</h1> // Main heading for the todo list
+    <h1>Todo List</h1> 
     <AddTodo
       input={this.state.input}
       addTodo={this.addTodo}
       handleInputChange={this.handleInputChange}
     />
+            <TodoList
+          todos={this.state.todos} 
+          toggleTodo={this.toggleTodo} 
+          deleteTodo={this.deleteTodo} 
+          startEdit={this.startEdit} 
+        />
 
   </div>
   );
